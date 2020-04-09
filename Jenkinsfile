@@ -11,8 +11,6 @@ pipeline {
         }
       }
       post {
-        always {
-        }
         failure {
           script { failedStages.add(STAGE_NAME) }
           echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
@@ -28,8 +26,6 @@ pipeline {
         }
       }
       post {
-        always {
-        }
         failure {
           script { failedStages.add(STAGE_NAME) }
           echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
