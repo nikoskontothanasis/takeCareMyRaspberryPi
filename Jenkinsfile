@@ -3,9 +3,13 @@ pipeline {
   
   stages {
     stage('Update') {
-      echo "Update the Rasbian OS..."
-      sh "sudo apt-get --yes update"
-      sh "sudo apt-get --yes upgrade"
+      steps {
+        script {
+          echo "Update the Rasbian OS..."
+          sh "sudo apt-get --yes update"
+          sh "sudo apt-get --yes upgrade"
+        }
+      }  
     }
     post {
       always {
@@ -17,8 +21,12 @@ pipeline {
     }
     
     stage('Mount the external drives') {
-      echo "Mounting..."
-      sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
+      steps {
+        script {
+          echo "Mounting..."
+          sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
+        }
+      }  
     }
     post {
       always {
