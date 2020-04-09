@@ -2,7 +2,7 @@ pipeline {
   agent { label 'RaspberryPi' }
   
   stages {
-    stage('Update ') {
+    stage('Update') {
       echo 'Update the Rasbian OS...'
       sh 'sudo apt-get --yes update'
       sh 'sudo apt-get --yes upgrade'
