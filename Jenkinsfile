@@ -1,5 +1,12 @@
+// The failedStages variable is reused between stages
+def failedStages=[]
+
+//Declarative
 pipeline {
   agent { label 'RaspberryPi' }
+  options {
+    timeout(time: 1, unit: 'HOURS')
+  }
   
   stages {
     stage('Update') {
