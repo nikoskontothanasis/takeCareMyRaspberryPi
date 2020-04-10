@@ -15,6 +15,7 @@ pipeline {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update"
           sh "sudo apt-get --yes upgrade"
+          sh "sudo updatedb"
         }
       }
       post {
@@ -26,9 +27,13 @@ pipeline {
     }
     
     stage('Mount the external drives') {
+      when {
+        expression { return false }
+      }
       steps {
         script {
           echo "Mounting..."
+          sh "sudo umount /media/pi/HDD_2T"
           sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
         }
       }
