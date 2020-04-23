@@ -26,7 +26,7 @@ pipeline {
       post {
         failure {
           script { failedStages.add(STAGE_NAME) }
-          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
         }
       }      
     }
@@ -42,7 +42,7 @@ pipeline {
       post {
         failure {
           script { failedStages.add(STAGE_NAME) }
-          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
         }
       }
     }
@@ -50,13 +50,13 @@ pipeline {
       steps {
         script {
           echo "The replacement will take place on ${filepath}..."
-          sh "python scripts/replaceWhiteSpaceChar.py ${filepath}"
+          sh "sudo python scripts/replaceWhiteSpaceChar.py ${filepath}"
         }
       }
       post {
         failure {
           script { failedStages.add(STAGE_NAME) }
-          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
         }
       }      
     }
@@ -67,7 +67,7 @@ pipeline {
           if (currentBuild.currentResult == 'SUCCESS') {
             telegramSend(message: 'Hi Nikos, Your Raspberry Pi is updated!')
         } else if (currentBuild.currentResult == 'FAILURE') {
-            telegramSend(message: "Hey Nikos, Something went wrong. Please check it here: \"${BUILD_URL}console\"")
+            telegramSend(message: "Hey Nikos, Something went wrong on \"${STAGE_NAME}\". Please check it here: \"${BUILD_URL}console\"")
         }
         }
       }
