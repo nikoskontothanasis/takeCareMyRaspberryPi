@@ -51,7 +51,7 @@ pipeline {
           if (currentBuild.currentResult == 'SUCCESS') {
             telegramSend(message: 'Hi Nikos, Your Raspberry Pi is updated!')
         } else if (currentBuild.currentResult == 'FAILURE') {
-            telegramSend(message: "Hey Nikos, Something went wrong. Please check it here: \"${BUILD_URL}\)
+            telegramSend(message: "Hey Nikos, Something went wrong. Please check it here: \"${BUILD_URL})
         }
         }
       }
