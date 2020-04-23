@@ -4,6 +4,10 @@ def failedStages=[]
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
+  parameters {
+        string(name: 'filepath')
+  }
+    
   options {
     timeout(time: 1, unit: 'HOURS')
   }
@@ -31,8 +35,6 @@ pipeline {
       steps {
         script {
           echo "Mounting..."
-          //sh "sudo umount /media/pi/HDD_2T"
-          //sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
           //Mount command specific for the user pi 
           sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
         }
@@ -43,6 +45,20 @@ pipeline {
           echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
         }
       }
+    }
+    stage('Replace White-Spaces') {
+      steps {
+        script {
+          echo "The replacement will take place on ${filepath}..."
+          sh "python scripts/replaceWhiteSpaceChar.py ${filepath}"
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception. Check the end of the build log at ${BUILD_URL}console to view the error"
+        }
+      }      
     }
   }
   post {
