@@ -15,6 +15,8 @@ pipeline {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update"
           sh "sudo apt-get --yes upgrade"
+          sh "sudo apt --yes autoremove"
+          sh "sudo updatedb"
         }
       }
       post {
@@ -29,7 +31,10 @@ pipeline {
       steps {
         script {
           echo "Mounting..."
-          sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
+          //sh "sudo umount /media/pi/HDD_2T"
+          //sh "sudo mount /dev/sda1 /media/pi/HDD_2T"
+          //Mount command specific for the user pi 
+          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
         }
       }
       post {
@@ -46,7 +51,7 @@ pipeline {
           if (currentBuild.currentResult == 'SUCCESS') {
             telegramSend(message: 'Hi Nikos, Your Raspberry Pi is updated!')
         } else if (currentBuild.currentResult == 'FAILURE') {
-            telegramSend(message: 'Hey Nikos, Something went wrong. Please check it!')
+            telegramSend(message: "Hey Nikos, Something went wrong. Please check it here: \"${BUILD_URL}console\"")
         }
         }
       }
