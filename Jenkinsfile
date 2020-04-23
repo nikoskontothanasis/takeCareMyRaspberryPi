@@ -15,6 +15,7 @@ pipeline {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update"
           sh "sudo apt-get --yes upgrade"
+          sh "sudo apt --yes autoremove"
           sh "sudo updatedb"
         }
       }
