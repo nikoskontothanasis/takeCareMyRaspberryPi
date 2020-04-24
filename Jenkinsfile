@@ -5,7 +5,7 @@ def failedStages=[]
 pipeline {
   agent { label 'RaspberryPi' }
   parameters {
-        string(name: 'filepath')
+        string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: '')
   }
     
   options {
