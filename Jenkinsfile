@@ -12,6 +12,22 @@ pipeline {
     timeout(time: 1, unit: 'HOURS')
   }
   
+    stage('Mount the external drives') {
+      steps {
+        script {
+          echo "Mounting..."
+          //Mount command specific for the user pi 
+          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+  
   stages {
     stage('Update the RaspberryPi') {
       steps {
@@ -31,21 +47,6 @@ pipeline {
       }      
     }
     
-    stage('Mount the external drives') {
-      steps {
-        script {
-          echo "Mounting..."
-          //Mount command specific for the user pi 
-          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
-        }
-      }
-      post {
-        failure {
-          script { failedStages.add(STAGE_NAME) }
-          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
-        }
-      }
-    }
     stage('Replace White-Spaces') {
       steps {
         script {
