@@ -12,12 +12,14 @@ pipeline {
     timeout(time: 1, unit: 'HOURS')
   }
   
+  stages {
+  
     stage('Mount the external drives') {
       steps {
         script {
           echo "Mounting..."
           //Mount command specific for the user pi 
-          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+          try { sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/' }
         }
       }
       post {
@@ -27,8 +29,7 @@ pipeline {
         }
       }
     }
-  
-  stages {
+ 
     stage('Update the RaspberryPi') {
       steps {
         script {
