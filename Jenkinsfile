@@ -19,10 +19,7 @@ pipeline {
         script {
           echo "Mounting..."
           //Mount command specific for the user pi 
-          try { sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/' }
-          catch(message: 'Error') {
-             echo "Failed"
-           }
+           sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
         }
       }
       post {
