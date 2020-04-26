@@ -20,9 +20,9 @@ pipeline {
           echo "Mounting..."
           //Mount command specific for the user pi 
           try { sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/' }
-          catchError(message: 'Error') {
-    echo "Failed"
-}
+          catch(message: 'Error') {
+             echo "Failed"
+           }
         }
       }
       post {
