@@ -52,7 +52,7 @@ pipeline {
     
     stage('Autoremove Command') {
       when {
-        return true
+        expression { params.autoremove == 'true' }
       }
       steps {
         script {
