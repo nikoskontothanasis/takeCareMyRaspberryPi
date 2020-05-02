@@ -52,11 +52,12 @@ pipeline {
     
     stage('Autoremove Command') {
       when {
-        return params.autoremove
+        return true
       }
       steps {
         script {
           echo "Execution of autoremove command..."
+          echo "${params.autoremove}"
           sh "sudo apt --yes autoremove"
         }
       }
