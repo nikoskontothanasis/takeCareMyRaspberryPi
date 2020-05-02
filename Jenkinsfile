@@ -5,7 +5,7 @@ def failedStages=[]
 pipeline {
   agent { label 'RaspberryPi' }
   parameters {
-    string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: 'Specify the file path to replace all with spaces with '_' ')
+    string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: "Specify the file path to replace all with spaces with _")
     booleanParam(name: 'autoremove', defaultValue: false, description: 'Enable or disable the autremove command. The default is disable.')
     
   }
