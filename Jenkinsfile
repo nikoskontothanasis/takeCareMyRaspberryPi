@@ -5,7 +5,9 @@ def failedStages=[]
 pipeline {
   agent { label 'RaspberryPi' }
   parameters {
-        string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: '')
+    string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: 'Specify the file path to replace all with spaces with '_' ')
+    booleanParam(name: 'autoremove', defaultValue: false, description: 'Enable or disable the autremove command. The default is disable.')
+    
   }
     
   options {
@@ -38,6 +40,24 @@ pipeline {
           sh "sudo apt-get --yes upgrade"
           sh "sudo apt --yes autoremove"
           sh "sudo updatedb"
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+    
+    stage('Autoremove Command') {
+      when {
+        autoremove=true
+      }
+      steps {
+        script {
+          echo "Execution of autoremove command..."
+          sh "sudo apt --yes autoremove"
         }
       }
       post {
