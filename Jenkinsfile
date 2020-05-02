@@ -58,7 +58,7 @@ pipeline {
         script {
           echo "Execution of autoremove command..."
           echo "${params.autoremove}"
-          sh "sudo apt --yes autoremove"
+          //sh "sudo apt --yes autoremove"
         }
       }
       post {
