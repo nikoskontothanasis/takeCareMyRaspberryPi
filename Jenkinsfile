@@ -38,7 +38,6 @@ pipeline {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update"
           sh "sudo apt-get --yes upgrade"
-          sh "sudo apt --yes autoremove"
           sh "sudo updatedb"
         }
       }
@@ -58,7 +57,7 @@ pipeline {
         script {
           echo "Execution of autoremove command..."
           echo "${params.autoremove}"
-          //sh "sudo apt --yes autoremove"
+          sh "sudo apt --yes autoremove"
         }
       }
       post {
