@@ -4,8 +4,7 @@ def failedStages=[]
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
-  parameters {
-  }
+  //parameters {}
     
   options {
     timeout(time: 1, unit: 'HOURS')
