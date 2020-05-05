@@ -1,0 +1,35 @@
+// The failedStages variable is reused between stages
+def failedStages=[]
+
+//Declarative
+pipeline {
+  agent { label 'RaspberryPi' }
+  //parameters {}
+    
+  options {
+    timeout(time: 1, unit: 'HOURS')
+  }
+  
+  stages {
+    stage('Speedtest') {
+      steps {
+        script {
+          sh "speedtest"
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+  }
+  post {
+    always {
+      script {
+         telegramSend(message: 'Hi Nikos, Check your intenet connection')
+        }
+      }
+    }
+}
