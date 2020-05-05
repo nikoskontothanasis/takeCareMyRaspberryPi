@@ -15,7 +15,7 @@ pipeline {
       steps {
         script {
           sh "speedtest>speedtest.txt"
-          sh "sudo python scripts/speedTest.py speedtest.txt
+          sh "sudo python scripts/speedTest.py speedtest.txt"
         }
       }
       post {
