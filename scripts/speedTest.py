@@ -1,4 +1,4 @@
-import os,mmap
+import os,mmap,sys
 filepath = sys.argv[1]
 with open(filepath, 'r') as f:
 	for line in f:
