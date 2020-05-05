@@ -1,6 +1,6 @@
 import os,mmap
-
-with open('test.txt', 'r') as f:
+filepath = sys.argv[1]
+with open(filepath, 'r') as f:
 	for line in f:
 		if 'Download:' in line:
 			totalValue=line.split(":")[1].strip()
