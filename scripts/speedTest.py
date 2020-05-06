@@ -6,3 +6,4 @@ with open(filepath, 'r') as f:
 			totalValue=line.split(":")[1].strip()
 			totalValue=totalValue.split(" ")[0].strip()
 print(totalValue)
+return totalValue
