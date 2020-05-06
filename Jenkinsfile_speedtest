@@ -8,6 +8,8 @@ pipeline {
     
   options {
     timeout(time: 1, unit: 'HOURS')
+    //Skip the default checkout to clear the workspace first and then checkout in an "Initialize" stage.
+    skipDefaultCheckout()
   }
   
   stages {
