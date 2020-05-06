@@ -14,6 +14,7 @@ pipeline {
     stage('Speedtest') {
       steps {
       cleanWs()
+      checkout scm
         script {
          sh "speedtest>speedtest.txt"
          result=sh(script: "sudo python scripts/speedTest.py speedtest.txt", returnStdout: true)
