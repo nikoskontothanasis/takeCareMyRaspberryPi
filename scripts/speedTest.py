@@ -1,4 +1,8 @@
 import os,mmap,sys
+
+def returnValue(value):
+	return value
+
 filepath = sys.argv[1]
 with open(filepath, 'r') as f:
 	for line in f:
@@ -6,5 +10,4 @@ with open(filepath, 'r') as f:
 			totalValue=line.split(":")[1].strip()
 			totalValue=totalValue.split(" ")[0].strip()
 print(totalValue)
-def returnValue(totalValue):
-	return totalValue
+returnValue(totalValue)
