@@ -13,6 +13,7 @@ pipeline {
   stages {
     stage('Speedtest') {
       steps {
+      cleanWs()
         script {
          sh "speedtest>speedtest.txt"
          result=sh(script: "sudo python scripts/speedTest.py speedtest.txt", returnStdout: true)
