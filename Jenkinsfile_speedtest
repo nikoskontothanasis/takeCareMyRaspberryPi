@@ -1,6 +1,6 @@
 // The failedStages variable is reused between stages
 def failedStages=[]
-
+def result=[]
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
@@ -14,8 +14,9 @@ pipeline {
     stage('Speedtest') {
       steps {
         script {
-          sh "speedtest>speedtest.txt"
-          sh "sudo python scripts/speedTest.py speedtest.txt"
+         sh "speedtest>speedtest.txt"
+         result=sh(script: "sudo python scripts/speedTest.py speedtest.txt", returnStdout: true)
+         echo result
         }
       }
       post {
@@ -29,7 +30,9 @@ pipeline {
   post {
     always {
       script {
-         telegramSend(message: 'Hi Nikos, Check your intenet connection')
+          if (result<'35'){
+            telegramSend(message: "Hi Nikos, Your intenet connection is \"${result}\" Mbps.")
+          }
         }
       }
     }
