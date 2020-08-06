@@ -5,7 +5,7 @@ def failedStages=[]
 pipeline {
   agent { label 'RaspberryPi' }
   parameters {
-    string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: "Specify the file path to replace all with spaces with _")
+    string(name: 'filepath', defaultValue: '', description: "Specify the file path to replace all with spaces with _")
     booleanParam(name: 'autoremove', defaultValue: false, description: 'Enable or disable the autremove command. The default is disable.')
     
   }
@@ -36,9 +36,9 @@ pipeline {
       steps {
         script {
           echo "Update the Rasbian OS..."
-          sh "sudo apt-get --yes update"
-          sh "sudo apt-get --yes upgrade"
-          sh "sudo updatedb"
+          sh "sudo apt-get --yes update --allow-downgrades"
+          sh "sudo apt-get --yes upgrade --allow-downgrades"
+          //sh "sudo updatedb"
         }
       }
       post {
