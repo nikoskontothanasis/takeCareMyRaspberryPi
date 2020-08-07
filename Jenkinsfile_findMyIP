@@ -18,7 +18,7 @@ pipeline {
       cleanWs()
       checkout scm
         script {
-         ip=sh(script: sh "sudo python scripts/findMyIP.py", returnStdout: true)
+         ip=sh(script: "sudo python scripts/findMyIP.py", returnStdout: true)
          echo ip
           }
         }
