@@ -19,6 +19,7 @@ pipeline {
       checkout scm
         script {
          ip=sh(script: "sudo python scripts/findMyIP.py", returnStdout: true)
+         ip=ip.trim()
          echo ip
          if (fileExists("archiveIP.txt")){
             oldIP=readFile 'archiveIP.txt'
@@ -27,7 +28,7 @@ pipeline {
          }
          else {
            writeFile file: 'archiveIP.txt', text: ip
-           telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}.\"")
+           telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
           }
         }
       }
