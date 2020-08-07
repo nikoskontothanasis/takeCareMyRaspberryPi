@@ -15,14 +15,13 @@ pipeline {
   stages {
     stage('Find My IP') {
       steps {
-      cleanWs()
+      //cleanWs()
       checkout scm
         script {
          ip=sh(script: "sudo python scripts/findMyIP.py", returnStdout: true)
          echo ip
           }
         }
-      }
       post {
         failure {
           script { failedStages.add(STAGE_NAME) }
@@ -38,4 +37,5 @@ pipeline {
         }
       }
     }
+  }
 }
