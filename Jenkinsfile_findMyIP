@@ -1,6 +1,6 @@
 // The failedStages variable is reused between stages
 def failedStages=[]
-def ip=[]
+def ip=0
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
@@ -19,6 +19,7 @@ pipeline {
       checkout scm
         script {
          ip=sh(script: "sudo python scripts/findMyIP.py", returnStdout: true)
+         ip=ip.trim()
          echo ip
         }
       }
@@ -34,7 +35,7 @@ pipeline {
   post {
     always {
       script {
-          telegramSend(message: "Hi Nikos, Your IP address changed to \"${ip}\".")
+          telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
         }
       }
     }
