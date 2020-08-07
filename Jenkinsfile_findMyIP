@@ -22,20 +22,20 @@ pipeline {
          echo ip
         }
       }
-        post {
-          failure {
-            script { failedStages.add(STAGE_NAME) }
-            echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
-            telegramSend(message: "Hey Nikos, Something went wrong on \"${STAGE_NAME}\". Please check it here: \"${BUILD_URL}console\"")
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+          telegramSend(message: "Hey Nikos, Something went wrong on \"${STAGE_NAME}\". Please check it here: \"${BUILD_URL}console\"")
         }
       }      
     }
   }
-    post {
-      always {
-        script {
-              telegramSend(message: "Hi Nikos, Your IP address changed to \"${ip}\".")
-          }
+  post {
+    always {
+      script {
+          telegramSend(message: "Hi Nikos, Your IP address changed to \"${ip}\".")
         }
       }
     }
+}
