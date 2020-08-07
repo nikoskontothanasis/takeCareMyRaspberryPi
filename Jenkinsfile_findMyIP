@@ -35,7 +35,7 @@ pipeline {
   post {
     always {
       script {
-            telegramSend(message: "Hi Nikos, Your IP address changed to\"${ip}\.")
+            telegramSend(message: "Hi Nikos, Your IP address changed to \"${ip}\".")
         }
       }
     }
