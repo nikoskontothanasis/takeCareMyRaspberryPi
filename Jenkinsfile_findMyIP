@@ -1,6 +1,6 @@
 // The failedStages variable is reused between stages
 def failedStages=[]
-def ip=0
+def ip=[]
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
@@ -19,16 +19,19 @@ pipeline {
       checkout scm
         script {
          ip=sh(script: "sudo python scripts/findMyIP.py", returnStdout: true)
-         ip=ip.trim()
+         //ip=ip.trim()
          echo ip
          if (fileExists("archiveIP.txt")){
             oldIP=readFile 'archiveIP.txt'
-            if (oldIP==ip)
-            echo "The IP is the same! Skip the notification.."
+            echo oldIP
+            if (oldIP==ip) {
+                echo "The IP is the same! Skip the notification.."
+            }
          }
          else {
            writeFile file: 'archiveIP.txt', text: ip
            telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
+           echo "txt sent!"
           }
         }
       }
