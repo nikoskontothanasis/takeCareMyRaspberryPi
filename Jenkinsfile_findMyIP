@@ -30,6 +30,7 @@ pipeline {
          }
          else {
            writeFile file: 'archiveIP.txt', text: ip
+           ip=ip.trim()
            telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
            echo "txt sent!"
           }
