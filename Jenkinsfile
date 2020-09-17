@@ -71,8 +71,9 @@ pipeline {
     stage('Replace White-Spaces') {
       steps {
         script {
-          echo "The replacement will take place on ${params.filepath}..."
-          sh "sudo python scripts/replaceWhiteSpaceChar.py ${params.filepath}"
+          echo "skip"
+         // echo "The replacement will take place on ${params.filepath}..."
+         // sh "sudo python scripts/replaceWhiteSpaceChar.py ${params.filepath}"
         }
       }
       post {
