@@ -68,6 +68,21 @@ pipeline {
       }      
     }
     
+    stage('Homebridge Update') {
+      steps {
+        script {
+          echo "Execution of Homebridge Update command..."
+          sh "sudo npm install -g --unsafe-perm homebridge-config-ui-x@latest"
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+    
     stage('Replace White-Spaces') {
       steps {
         script {
