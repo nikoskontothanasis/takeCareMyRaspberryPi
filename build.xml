@@ -1,40 +1,15 @@
 <project name="Replace_My_IP" default="init" basedir=".">
-
-  <!-- set global properties for this build -->
-  
   <target name="init">
-  
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="build_dir"/>
     <loadfile property="IP"
           srcFile="archiveIP.txt"/>
-    <copy file="nikosk_template.ovpn" tofile="build_dir/remoteConnection.ovpn">
+    <copy file="/home/pi/Templates/vpn_template.ovpn" tofile="build_dir/remoteConnection.ovpn">
     	<filterchain>
        <replacetokens>
             <token key="IP" value="${IP}"/>
        </replacetokens>
     	</filterchain>
 	</copy>
-  </target>
-
-  
+  </target> 
 </project>
-
-
-
-<!--<copy file="${web.dir}/jexamples.css_tpl"
-         tofile="${web.dir}/jexamples.css" >
-    <filterchain>
-       <replacetokens>
-            <token key="SERVER_NAME" value="server2"/>
-            <token key="PROFILE_NAME" value="profi"/>
-        </replacetokens>
-    </filterchain>
-</copy>
-
-
-<propertyregex property="remote"
-               input="${propA}"
-               regexp=""
-               replace="_"
-               global="true" /> -->
