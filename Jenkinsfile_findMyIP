@@ -2,6 +2,7 @@
 def failedStages=[]
 def ip=[]
 def oldIP=[]
+def upload = false
 //Declarative
 pipeline {
   agent { label 'RaspberryPi' }
@@ -33,6 +34,7 @@ pipeline {
                ip=ip.trim()
                telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
                echo "The IP changed, Message sent!"
+               upload = true
           }
          }
          else {
@@ -40,6 +42,7 @@ pipeline {
            ip=ip.trim()
            telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
            echo "The file does not exist, Message sent!"
+
           }
         }
       }
@@ -53,6 +56,9 @@ pipeline {
     }
 
     stage('Update VPN file') {
+    when {
+        expression { upload = true }
+      }
       steps {
         sh'sudo ant -file build.xml'
       }
@@ -66,7 +72,11 @@ pipeline {
     }
 
     stage('Upload Artifacts to DropBox') {
+    when {
+        expression { upload = true }
+      }
       steps {
+
         dropbox configName: 'Dropbox', remoteDirectory: '/VPN', removePrefix: '', sourceFiles: 'build_dir/remoteConnection.ovpn'
       }
       post {
