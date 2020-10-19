@@ -57,7 +57,7 @@ pipeline {
 
     stage('Update VPN file') {
     when {
-        expression { upload = true }
+        expression { upload == true }
       }
       steps {
         sh'sudo ant -file build.xml'
@@ -73,7 +73,7 @@ pipeline {
 
     stage('Upload Artifacts to DropBox') {
     when {
-        expression { upload = true }
+        expression { upload == true }
       }
       steps {
 
