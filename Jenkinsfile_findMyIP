@@ -42,6 +42,7 @@ pipeline {
            ip=ip.trim()
            telegramSend(message: "Hi Nikos, Your IP address changed to: \"${ip}\"")
            echo "The file does not exist, Message sent!"
+           build job: "Speedtest", wait: false
 
           }
         }
