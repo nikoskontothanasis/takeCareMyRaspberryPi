@@ -23,7 +23,7 @@ pipeline {
       steps {
         script {
           echo "Mounting..."
-          Mount command specific for the user pi 
+          //Mount command specific for the user pi 
           sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
         }
       }
@@ -101,6 +101,9 @@ pipeline {
     }
     
     stage('Update Local Repositories') {
+      when {
+        expression { return false }
+      }
       steps {
         dir('/home/pi/GitHubRepositories/takeCareMyRaspberryPi') {
           withCredentials([string(credentialsId: 'github_id_rsa', variable: 'GitHub_id_rsa')]) {
