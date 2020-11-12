@@ -100,6 +100,24 @@ pipeline {
       }      
     }
     
+    stage('Update Local Repositories') {
+      steps {
+        dir('/home/pi/GitHubRepositories/takeCareMyRaspberryPi') {
+          withCredentials([string(credentialsId: 'github_id_rsa', variable: 'GitHub_id_rsa')]) {
+          script {
+            sh 'git pull origin master'
+            }
+          }
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+    
     stage('Replace White-Spaces') {
       when {
         expression { return false }
