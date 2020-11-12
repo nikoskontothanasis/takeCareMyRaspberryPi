@@ -17,11 +17,14 @@ pipeline {
   stages {
   
     stage('Mount the external drives') {
+       when {
+        expression { return false }
+      }
       steps {
         script {
           echo "Mounting..."
-          //Mount command specific for the user pi 
-          // sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+          Mount command specific for the user pi 
+          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
         }
       }
       post {
@@ -38,7 +41,7 @@ pipeline {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update --allow-downgrades"
           sh "sudo apt-get --yes upgrade --allow-downgrades"
-          //sh "sudo updatedb"
+          sh "sudo updatedb"
         }
       }
       post {
@@ -51,7 +54,7 @@ pipeline {
     
     stage('Autoremove Command') {
       when {
-        expression { params.autoremove == true }
+        expression { params.autoremove == 'true' }
       }
       steps {
         script {
@@ -83,7 +86,24 @@ pipeline {
       }      
     }
     
+    stage('Pi-Hole Update') {
+      steps {
+        script {
+          sh 'sudo pihole -up'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+    
     stage('Replace White-Spaces') {
+      when {
+        expression { return false }
+      }
       steps {
         script {
           echo "skip"
