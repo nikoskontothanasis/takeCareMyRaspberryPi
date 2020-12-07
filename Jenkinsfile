@@ -40,7 +40,8 @@ pipeline {
         script {
           echo "Update the Rasbian OS..."
           sh "sudo apt-get --yes update --allow-downgrades"
-          sh "sudo apt-get --yes upgrade --allow-downgrades"
+          sh "sudo apt-get -y --yes upgrade --allow-downgrades"
+          sh "sudo apt-get autoclean"
           sh "sudo updatedb"
         }
       }
