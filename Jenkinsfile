@@ -5,7 +5,7 @@ def failedStages=[]
 pipeline {
   agent { label 'RaspberryPi' }
   parameters {
-    string(name: 'filepath', defaultValue: '', description: "Specify the file path to replace all with spaces with _")
+    string(name: 'filepath', defaultValue: '/home/pi/Downloads', description: "Specify the file path to replace all with spaces with _")
     booleanParam(name: 'autoremove', defaultValue: '', description: 'Enable or disable the autremove command. The default is disable.')
     
   }
@@ -76,6 +76,7 @@ pipeline {
       steps {
         script {
           echo "Execution of Homebridge Update command..."
+          sh "sudo npm install -g --unsafe-perm homebridge@latest"
           sh "sudo npm install -g --unsafe-perm homebridge-config-ui-x@latest"
         }
       }
@@ -123,14 +124,11 @@ pipeline {
     }
     
     stage('Replace White-Spaces') {
-      when {
-        expression { return false }
-      }
       steps {
         script {
           echo "skip"
-         // echo "The replacement will take place on ${params.filepath}..."
-         // sh "sudo python scripts/replaceWhiteSpaceChar.py ${params.filepath}"
+          echo "The replacement will take place on ${params.filepath}..."
+          sh "sudo python scripts/replaceWhiteSpaceChar.py ${params.filepath}"
         }
       }
       post {
