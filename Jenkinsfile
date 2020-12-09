@@ -102,6 +102,20 @@ pipeline {
       }      
     }
     
+    stage('Pi-Hole Maintenance') {
+      steps {
+        script {
+          sh 'sudo systemctl restart pihole-FTL.service'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }      
+    }
+    
     stage('Update Local Repositories') {
       when {
         expression { return false }
