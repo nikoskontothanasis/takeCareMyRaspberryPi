@@ -78,7 +78,7 @@ pipeline {
       }
       steps {
 
-        dropbox configName: 'Dropbox', remoteDirectory: '/VPN', removePrefix: '', sourceFiles: 'build_dir/remoteConnection.ovpn'
+        dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/VPN', removePrefix: '', sourceFiles: 'build_dir/remoteConnection.ovpn'
       }
       post {
         failure {
