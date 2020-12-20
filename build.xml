@@ -1,10 +1,11 @@
 <project name="Replace_My_IP" default="init" basedir=".">
   <target name="init">
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="build_dir"/>
+	<delete file="RemoteConnection/remoteConnection.ovpn"/>
+	<mkdir dir="RemoteConnection"/>
     <loadfile property="IP"
           srcFile="archiveIP.txt"/>
-    <copy file="/home/pi/Templates/vpn_template.ovpn" tofile="build_dir/remoteConnection.ovpn">
+    <copy file="/home/pi/Templates/vpn_template.ovpn" tofile="RemoteConnection/remoteConnection.ovpn">
     	<filterchain>
        <replacetokens>
             <token key="IP" value="${IP}"/>
