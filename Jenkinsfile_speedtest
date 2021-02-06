@@ -18,7 +18,7 @@ pipeline {
       cleanWs()
       checkout scm
         script {
-         sh "speedtest>speedtest.txt"
+         sh "speedtest --accept-gdpr>speedtest.txt"
          result=sh(script: "sudo python scripts/speedTest.py speedtest.txt", returnStdout: true)
          echo result
         }
