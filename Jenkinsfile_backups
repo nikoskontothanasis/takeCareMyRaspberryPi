@@ -16,8 +16,8 @@ pipeline {
         script {
           cleanWs()
           checkout scm
-          sh 'sudo mkdir /upload/${folderName}/'
-          sh 'sudo chmod 777 /upload/${folderName}/'
+          sh 'sudo mkdir /upload/${env.BUILD_TAG}/'
+          sh 'sudo chmod 777 /upload/${env.BUILD_TAG}/'
         }
       }
       post {
@@ -34,7 +34,7 @@ pipeline {
           
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/homebridge_backup.sh'
-          dir('/upload/folderName/') {
+          dir('/upload/${env.BUILD_TAG}/') {
             sh './scripts/homebridge_backup.sh'
           }
         }
@@ -52,7 +52,7 @@ pipeline {
         script {
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/pihole_backup.sh'
-          dir('/upload/folderName/') {
+          dir('/upload/${env.BUILD_TAG}/') {
             sh './scripts/pihole_backup.sh'
           }
         }
@@ -70,7 +70,7 @@ pipeline {
         script {
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/general_backup.sh'
-          dir('/upload/folderName/') {
+          dir('/upload/${env.BUILD_TAG}/') {
             sh './scripts/general_backup.sh'
           }
         }
@@ -88,7 +88,7 @@ pipeline {
         script {
           echo "Gather backup files from"
           sh 'sudo cp -R /backup/Jenkins/* /upload/folderName/'
-          sh 'sudo zip -r archive_${folderName}.zip /upload/${folderName}'
+          sh 'sudo zip -r archive_${env.BUILD_TAG}.zip /upload/${env.BUILD_TAG}'
         }
       }
       post {
@@ -102,7 +102,7 @@ pipeline {
     stage('Upload files') {
       steps {
         script {
-          dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/Backups', removePrefix: '', sourceFiles: 'archive_"${folderName}".zip'
+          dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/Backups', removePrefix: '', sourceFiles: 'archive_"${env.BUILD_TAG}".zip'
         }
       }
       post {
