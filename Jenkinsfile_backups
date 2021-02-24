@@ -16,8 +16,8 @@ pipeline {
         script {
           cleanWs()
           checkout scm
-          sh 'sudo mkdir /upload/folderName/'
-          sh 'sudo chmod 777 /upload/folderName/'
+          sh 'sudo mkdir /upload/${folderName}/'
+          sh 'sudo chmod 777 /upload/${folderName}/'
         }
       }
       post {
