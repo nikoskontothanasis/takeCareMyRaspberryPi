@@ -1,0 +1,127 @@
+// The failedStages variable is reused between stages
+def failedStages=[]
+def folderName=env.BUILD_TAG
+//Declarative
+pipeline {
+  agent { label 'RaspberryPi' }
+    
+  options {
+    timeout(time: 1, unit: 'HOURS')
+  }
+  
+  stages {
+  
+  stage('Prepare') {
+      steps {
+        script {
+          cleanWs()
+          checkout scm
+          sh 'sudo mkdir /upload/folderName/'
+          sh 'sudo chmod 777 /upload/folderName/'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+  
+    stage('Backup Homebridge') {
+      steps {
+        script {
+          
+          echo "Homebridge backing up..."
+          sh 'chmod +x scripts/homebridge_backup.sh'
+          dir('/upload/folderName/') {
+            sh './scripts/homebridge_backup.sh'
+          }
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+    
+    stage('Backup Pi-Hole') {
+      steps {
+        script {
+          echo "Homebridge backing up..."
+          sh 'chmod +x scripts/pihole_backup.sh'
+          dir('/upload/folderName/') {
+            sh './scripts/pihole_backup.sh'
+          }
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+    
+    stage('Backup files') {
+      steps {
+        script {
+          echo "Homebridge backing up..."
+          sh 'chmod +x scripts/general_backup.sh'
+          dir('/upload/folderName/') {
+            sh './scripts/general_backup.sh'
+          }
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+    
+    stage('Gather backup files') {
+      steps {
+        script {
+          echo "Gather backup files from"
+          sh 'sudo cp -R /backup/Jenkins/* /upload/folderName/'
+          sh 'sudo zip -r archive_${folderName}.zip /upload/${folderName}'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+    
+    stage('Upload files') {
+      steps {
+        script {
+          dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/Backups', removePrefix: '', sourceFiles: 'archive_"${folderName}".zip'
+        }
+      }
+      post {
+        failure {
+          script { failedStages.add(STAGE_NAME) }
+          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
+        }
+      }
+    }
+    }
+    post {
+    always {
+      script {
+          if (currentBuild.currentResult == 'SUCCESS') {
+            telegramSend(message: 'The backup completed!')
+        } else if (currentBuild.currentResult == 'FAILURE') {
+            telegramSend(message: "Hey Nikos, Something went wrong on \"${STAGE_NAME}\". Please check it here: \"${BUILD_URL}console\"")
+        }
+        }
+      }
+    }
+}
