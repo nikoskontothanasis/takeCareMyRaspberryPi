@@ -15,9 +15,12 @@ pipeline {
       steps {
         script {
           cleanWs()
-          //checkout scm
-          sh 'sudo mkdir /upload/backup_${env.BUILD_TAG}'
-          sh 'sudo chmod 777 /upload/backup_${env.BUILD_TAG}'
+          checkout scm
+          echo folderName
+          sh "sudo mkdir /upload/backup_${folderName}"
+          sh "sudo chmod 777 /upload/backup_${folderName}"
+          sh "sudo cp -r scripts /upload/backup_${folderName}"
+          sh "sudo chmod 777 /upload/backup_${folderName}/scripts/*"
         }
       }
       post {
@@ -34,8 +37,12 @@ pipeline {
           
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/homebridge_backup.sh'
-          dir('/upload/${env.BUILD_TAG}/') {
-            sh './scripts/homebridge_backup.sh'
+          dir("/upload/backup_${folderName}") {
+              withCredentials([
+          usernamePassword(credentialsId: 'HomebridgeUSERPASS', usernameVariable: 'HomebridgeUser', passwordVariable: 'HomebridgePass')
+        ]){
+            sh "./scripts/homebridge_backup.sh ${HomebridgeUser} ${HomebridgePass}"
+        }
           }
         }
       }
@@ -52,7 +59,7 @@ pipeline {
         script {
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/pihole_backup.sh'
-          dir('/upload/${env.BUILD_TAG}/') {
+          dir("/upload/backup_${folderName}") {
             sh './scripts/pihole_backup.sh'
           }
         }
@@ -70,7 +77,7 @@ pipeline {
         script {
           echo "Homebridge backing up..."
           sh 'chmod +x scripts/general_backup.sh'
-          dir('/upload/${env.BUILD_TAG}/') {
+          dir("/upload/backup_${folderName}") {
             sh './scripts/general_backup.sh'
           }
         }
@@ -87,8 +94,13 @@ pipeline {
       steps {
         script {
           echo "Gather backup files from"
-          sh 'sudo cp -R /backup/Jenkins/* /upload/folderName/'
-          sh 'sudo zip -r archive_${env.BUILD_TAG}.zip /upload/${env.BUILD_TAG}'
+          sh "sudo cp -R /backup/Jenkins/* /upload/backup_${folderName}/jenkins"
+          sh "sudo rm -rf scripts"
+          withCredentials([string(credentialsId: 'zipPassword', variable: 'PASS')]) {
+           
+            sh "sudo zip -P ${PASS} -r archive_${env.BUILD_TAG}.zip /upload/backup_${folderName}"
+              
+          }
         }
       }
       post {
@@ -102,7 +114,8 @@ pipeline {
     stage('Upload files') {
       steps {
         script {
-          dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/Backups', removePrefix: '', sourceFiles: 'archive_"${env.BUILD_TAG}".zip'
+            echo "UPLOAD"
+          dropbox cleanRemote: true, configName: 'Dropbox', remoteDirectory: '/Backups', removePrefix: '', sourceFiles: "archive_${env.BUILD_TAG}.zip"
         }
       }
       post {
