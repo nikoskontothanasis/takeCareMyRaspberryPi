@@ -15,9 +15,9 @@ pipeline {
       steps {
         script {
           cleanWs()
-          checkout scm
-          sh 'sudo mkdir /upload/${env.BUILD_TAG}/'
-          sh 'sudo chmod 777 /upload/${env.BUILD_TAG}/'
+          //checkout scm
+          sh 'sudo mkdir /upload/backup_\"${env.BUILD_TAG}"\/'
+          sh 'sudo chmod 777 /upload/backup_\"${env.BUILD_TAG}"\/'
         }
       }
       post {
