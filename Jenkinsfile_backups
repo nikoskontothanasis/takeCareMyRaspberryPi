@@ -95,7 +95,7 @@ pipeline {
         script {
           echo "Gather backup files from"
           sh "sudo cp -R /backup/Jenkins/* /upload/backup_${folderName}/jenkins"
-          sh "sudo rm -rf scripts"
+          sh "sudo rm -rf /upload/backup_${folderName}/scripts"
           withCredentials([string(credentialsId: 'zipPassword', variable: 'PASS')]) {
            
             sh "sudo zip -P ${PASS} -r archive_${env.BUILD_TAG}.zip /upload/backup_${folderName}"
