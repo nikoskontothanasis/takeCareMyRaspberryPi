@@ -1,7 +1,7 @@
 #!/bin/bash
 
-cp -r /home/pi/Code .
-cp -r /home/pi/Projects .
-cp -r /home/pi/Documents .
-cp -r /home/pi/Templates .
-cp -r /home/pi/Desktop .
+sudo cp -r /home/pi/Code .
+sudo cp -r /home/pi/Projects .
+sudo cp -r /home/pi/Documents .
+sudo cp -r /home/pi/Templates .
+sudo cp -r /home/pi/Desktop .
