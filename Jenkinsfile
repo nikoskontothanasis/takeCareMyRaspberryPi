@@ -17,14 +17,15 @@ pipeline {
   stages {
   
     stage('Mount the external drives') {
-       when {
-        expression { return false }
-      }
+       //when {
+        //expression { return false }
+      //}
       steps {
         script {
           echo "Mounting..."
           //Mount command specific for the user pi 
-          sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+          //sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+          sh 'sudo mount -a'
         }
       }
       post {
