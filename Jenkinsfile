@@ -44,7 +44,7 @@ pipeline {
           sh "sudo apt-get --yes update --allow-downgrades"
           sh "sudo apt-get -y --yes upgrade --allow-downgrades"
           sh "sudo apt-get autoclean"
-          sh "sudo updatedb"
+         // sh "sudo updatedb"
         }
       }
       post {
