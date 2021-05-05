@@ -25,6 +25,7 @@ pipeline {
           echo "Mounting..."
           //Mount command specific for the user pi 
           //sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
+          sh 'sudo umount /home/pi/Shared/HDD'
           sh 'sudo mount -a'
         }
       }
