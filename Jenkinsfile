@@ -25,10 +25,10 @@ pipeline {
           echo "Mounting..."
           //Mount command specific for the user pi 
           //sh 'sudo mount -o uid=pi,gid=pi /dev/sda1 /home/pi/ExternalDisks/Toshiba2T/'
-          sh 'sudo systemctl stop deluged.service'
+          //sh 'sudo systemctl stop deluged.service'
           sh 'sudo umount -l /home/pi/Shared/HDD'
           sh 'sudo mount -a'
-          sh 'sudo systemctl start deluged.service'
+          // sh 'sudo systemctl start deluged.service'
           //stop and start the deluged service in order to successfully un-mount and mount the disk, beacuse it uses it.
         }
       }
