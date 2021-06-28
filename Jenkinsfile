@@ -6,7 +6,7 @@ pipeline {
   agent { label 'RaspberryPi' }
   parameters {
     string(name: 'filepath', defaultValue: '/home/pi/Downloads/Torrents', description: "Specify the file path to replace all with spaces with _")
-    booleanParam(name: 'autoremove', defaultValue: '', description: 'Enable or disable the autremove command. The default is disable.')
+    //booleanParam(name: 'autoremove', defaultValue: '', description: 'Enable or disable the autremove command. The default is disable.')
     
   }
     
@@ -17,9 +17,9 @@ pipeline {
   stages {
   
     stage('Mount the external drives') {
-       //when {
-        //expression { return false }
-      //}
+       when {
+        expression { params.mount == true }
+      }
       steps {
         script {
           echo "Mounting..."
@@ -41,6 +41,9 @@ pipeline {
     }
  
     stage('Update the RaspberryPi') {
+      when {
+        expression { params.updateOS == true }
+      }
       steps {
         script {
           echo "Update the Rasbian OS..."
@@ -60,7 +63,7 @@ pipeline {
     
     stage('Autoremove Command') {
       when {
-        expression { params.autoremove == 'true' }
+        expression { params.autoremove == true }
       }
       steps {
         script {
@@ -78,6 +81,9 @@ pipeline {
     }
     
     stage('Homebridge Update') {
+      when {
+        expression { params.homebridge == true }
+      }
       steps {
         script {
           echo "Execution of Homebridge Update command..."
@@ -94,6 +100,9 @@ pipeline {
     }
     
     stage('Pi-Hole Update') {
+      when {
+        expression { params.pihole == true }
+      }
       steps {
         script {
           sh 'sudo pihole -up'
@@ -108,6 +117,9 @@ pipeline {
     }
     
     stage('Pi-Hole Maintenance') {
+      when {
+        expression { params.pihole == true }
+      }
       steps {
         script {
           sh 'sudo systemctl restart pihole-FTL.service'
@@ -121,28 +133,11 @@ pipeline {
       }      
     }
     
-    stage('Update Local Repositories') {
-      when {
-        expression { return false }
-      }
-      steps {
-        dir('/home/pi/GitHubRepositories/takeCareMyRaspberryPi') {
-          withCredentials([string(credentialsId: 'github_id_rsa', variable: 'GitHub_id_rsa')]) {
-          script {
-            sh 'git pull origin master'
-            }
-          }
-        }
-      }
-      post {
-        failure {
-          script { failedStages.add(STAGE_NAME) }
-          echo "Failed at stage \"${STAGE_NAME}\" with unhandled exception."
-        }
-      }      
-    }
     
     stage('Replace White-Spaces') {
+      when {
+        expression { params.whitespace == true }
+      }
       steps {
         script {
           echo "skip"
