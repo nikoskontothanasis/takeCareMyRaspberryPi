@@ -18,7 +18,11 @@ pipeline {
       cleanWs()
       checkout scm
         script {
-         sh "sudo python3 scripts/speedtestGrafana.py"
+        withCredentials([
+          usernamePassword(credentialsId: 'Grafana_username_password', usernameVariable: 'GrafanaUser', passwordVariable: 'GrafanaPass')
+        ]){
+         sh "sudo python3 scripts/speedtestGrafana.py ${GrafanaUser} ${GrafanaPass}"
+         }
         }
       }
       post {
